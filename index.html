@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rainbow Beat Ranch Guardians</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🦄 Rainbow Beat Ranch Guardians 🐰</h1>
+    <p>Build your magical ranch, then dance to the beat to clear the gloom!</p>
+  </header>
+
+  <main>
+    <section class="hud">
+      <div>⭐ Star Notes: <span id="starNotes">0</span></div>
+      <div>💖 Friend Hearts: <span id="friendHearts">0</span></div>
+      <div>🗝️ Rainbow Keys: <span id="rainbowKeys">0</span></div>
+      <div>🎵 Songs Unlocked: <span id="songsUnlocked">1</span>/3</div>
+      <div>🏆 Current Streak: <span id="streak">0</span></div>
+      <div>🌫️ Gloom Meter: <span id="gloomMeter">40</span>/100</div>
+    </section>
+
+    <section class="controls-row">
+      <button id="buildTab" class="active">🏗️ Build Mode</button>
+      <button id="danceTab">💃 Dance Mode</button>
+      <label class="toggle">
+        <input id="chillMode" type="checkbox" />
+        Chill Mode (extra easy)
+      </label>
+      <button id="resetProgress" class="danger">Reset Save</button>
+    </section>
+
+    <section id="buildMode" class="panel active">
+      <h2>Build Mode</h2>
+      <p>Pick an item, then tap/click on the ranch to place it. Decorations lower the gloom!</p>
+
+      <div class="shop" id="shop"></div>
+
+      <div class="ranch-wrap">
+        <div id="ranch" aria-label="Ranch build area"></div>
+      </div>
+    </section>
+
+    <section id="danceMode" class="panel">
+      <h2>Dance Mode</h2>
+      <p>Hit notes as they reach the line: <strong>A</strong>, <strong>S</strong>, <strong>D</strong> (or tap buttons below)</p>
+
+      <div class="song-picker">
+        <label for="songSelect">Song:</label>
+        <select id="songSelect"></select>
+        <button id="startSong">Start Song</button>
+      </div>
+
+      <div class="progress-wrap" aria-label="Gloom progress">
+        <div id="gloomBar" class="gloom-bar"></div>
+      </div>
+
+      <div class="lane-wrap" id="laneWrap">
+        <div class="lane" data-key="A"><div class="hit-line">A</div></div>
+        <div class="lane" data-key="S"><div class="hit-line">S</div></div>
+        <div class="lane" data-key="D"><div class="hit-line">D</div></div>
+      </div>
+
+      <div class="touch-controls" aria-label="Touch controls for dance mode">
+        <button data-lane="0">A</button>
+        <button data-lane="1">S</button>
+        <button data-lane="2">D</button>
+      </div>
+
+      <div id="songStatus">Tap Start Song to begin!</div>
+    </section>
+
+    <section class="rules">
+      <h3>Parent-Friendly Rules</h3>
+      <ul>
+        <li>No microtransactions.</li>
+        <li>No paid currency.</li>
+        <li>All unlockables are earned by play only.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
