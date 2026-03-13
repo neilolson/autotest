@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="bg-stars"></div>
   <header>
     <h1>🦄 Rainbow Beat Ranch Guardians 🐰</h1>
     <p>Build your magical ranch, then dance to the beat to clear the gloom!</p>
@@ -41,9 +42,7 @@
     <section id="buildMode" class="panel active">
       <h2>Build Mode</h2>
       <p>Pick an item, then tap/click on the ranch to place it. Decorations lower the gloom!</p>
-
       <div class="shop" id="shop"></div>
-
       <div class="ranch-wrap">
         <div id="ranch" aria-label="Ranch build area"></div>
       </div>
@@ -51,7 +50,7 @@
 
     <section id="danceMode" class="panel">
       <h2>Dance Mode</h2>
-      <p>Hit notes as they reach the line: <strong>A</strong>, <strong>S</strong>, <strong>D</strong> (or tap buttons below)</p>
+      <p>Rhythm keys: <strong>A</strong>, <strong>S</strong>, <strong>D</strong> • Synth keys: <strong>J</strong>, <strong>K</strong>, <strong>L</strong></p>
 
       <div class="song-picker">
         <label for="songSelect">Song:</label>
@@ -63,16 +62,30 @@
         <div id="gloomBar" class="gloom-bar"></div>
       </div>
 
+      <div class="stage-wrap">
+        <div id="unicornDancer" class="unicorn-dancer" aria-label="Dancing unicorn">
+          <span class="spark">✨</span>
+          🦄
+        </div>
+        <div class="stage-caption" id="synthStatus">Synth Jam: Play J / K / L to make beats!</div>
+      </div>
+
       <div class="lane-wrap" id="laneWrap">
-        <div class="lane" data-key="A"><div class="hit-line">A</div></div>
-        <div class="lane" data-key="S"><div class="hit-line">S</div></div>
-        <div class="lane" data-key="D"><div class="hit-line">D</div></div>
+        <div class="lane"><div class="hit-line">A</div></div>
+        <div class="lane"><div class="hit-line">S</div></div>
+        <div class="lane"><div class="hit-line">D</div></div>
       </div>
 
       <div class="touch-controls" aria-label="Touch controls for dance mode">
         <button data-lane="0">A</button>
         <button data-lane="1">S</button>
         <button data-lane="2">D</button>
+      </div>
+
+      <div class="synth-pad" aria-label="Synth pads">
+        <button data-synth="j">J ♪</button>
+        <button data-synth="k">K ♫</button>
+        <button data-synth="l">L ♬</button>
       </div>
 
       <div id="songStatus">Tap Start Song to begin!</div>

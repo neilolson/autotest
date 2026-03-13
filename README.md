@@ -3,65 +3,60 @@
 A kid-friendly browser prototype that combines:
 - **Build Mode** (decorate a unicorn + rabbit ranch)
 - **Dance Mode** (3-lane rhythm mini-game)
+- **Synth Jam** (child-made rhythm on keyboard)
 - **Quest loop** (simple goals with reward stars)
 
-## Do I need all files on my PC?
+## Files you need on your PC
 
-You should keep these files together in one folder:
+To **run the game**, keep these in the same folder:
 - `index.html`
 - `style.css`
 - `game.js`
-- `README.md` (optional for play, useful for instructions)
-- `scripts/smoke_test.sh` (optional for testing)
 
-`unicorn_game_ideas.md` is design documentation only (not required to run the game).
+Optional but recommended:
+- `README.md` (instructions)
+- `scripts/smoke_test.sh` (quick automated check)
+- `unicorn_game_ideas.md` (design notes only)
 
 ## Run locally
-
-From the project folder:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open:
+Open in browser:
 
 `http://localhost:8000/index.html`
 
 ## Controls
 
 - Build Mode: click/tap the ranch to place the selected item.
-- Dance Mode keyboard: press `A`, `S`, `D` as notes reach the hit line.
-- Dance Mode touch: use the large `A`, `S`, `D` buttons.
-- Chill Mode: toggles slower/easier note timing.
+- Dance Mode keys: `A`, `S`, `D`.
+- Synth Jam keys: `J`, `K`, `L`.
+- Touch: use on-screen rhythm and synth buttons.
+- Chill Mode: easier timing.
 
-## How to test locally
+## Smooth gameplay notes
 
-### Quick manual test
-1. Start the local server.
-2. Open the URL in browser.
-3. Place 3+ items in Build Mode and verify quest progress updates.
-4. Switch to Dance Mode and start a song.
-5. Hit notes with keyboard or touch buttons.
-6. Confirm stars/hearts/gloom/quest progress change.
+- The rhythm track uses `requestAnimationFrame` for smoother movement.
+- Synth notes are generated in-browser with Web Audio (no external files).
+- Unicorn dancer reacts to rhythm/synth hits with visual animations.
 
-### Automated smoke test
+## Local testing
+
+### 1) Manual playtest
+1. Start server and open the game URL.
+2. Place a few decorations and verify quest progress changes.
+3. Start a song and hit `A/S/D` on beat.
+4. Press `J/K/L` to play synth notes and watch unicorn dance feedback.
+5. Confirm stars/hearts/gloom update and saves persist on refresh.
+
+### 2) Smoke test
 
 ```bash
 ./scripts/smoke_test.sh
 ```
 
-This verifies that key UI ids and gameplay functions are present in served files.
-
-## Progression
-
-- You earn Star Notes, Friend Hearts, and Rainbow Keys while playing.
-- More songs unlock from successful dance sessions.
-- Build items unlock with in-game Star Notes only.
-- The **Gloom Meter** tracks ranch danger; dance/build actions can restore joy.
-- Quests grant bonus Star Notes when completed.
-- Progress is saved in your browser (`localStorage`).
-
-## Monetization Policy
+## Monetization policy
 
 All unlockables are earned in game through play. There are no payments, no premium pass, and no microtransactions.
