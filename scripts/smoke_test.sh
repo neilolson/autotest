@@ -9,9 +9,12 @@ sleep 1
 curl -fsS http://127.0.0.1:8000/index.html >/tmp/rainbow_index.html
 curl -fsS http://127.0.0.1:8000/game.js >/tmp/rainbow_game.js
 
-rg -q "id=\"gloomMeter\"" /tmp/rainbow_index.html
-rg -q "id=\"gloomBar\"" /tmp/rainbow_index.html
-rg -q "function changeGloom" /tmp/rainbow_game.js
-rg -q "localStorage\.setItem" /tmp/rainbow_game.js
+rg -q 'id="gloomMeter"' /tmp/rainbow_index.html
+rg -q 'id="gloomBar"' /tmp/rainbow_index.html
+rg -q 'id="questText"' /tmp/rainbow_index.html
+rg -q 'id="questProgress"' /tmp/rainbow_index.html
+rg -q 'function changeGloom' /tmp/rainbow_game.js
+rg -q 'function progressQuest' /tmp/rainbow_game.js
+rg -q 'localStorage\.setItem' /tmp/rainbow_game.js
 
 echo "Smoke test passed"

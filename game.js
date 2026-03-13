@@ -1,4 +1,10 @@
-const SAVE_KEY = 'rainbow_beat_ranch_save_v3';
+const SAVE_KEY = 'rainbow_beat_ranch_save_v4';
+
+const quests = [
+  { text: 'Place 3 decorations to start your ranch show.', type: 'build', target: 3, reward: 5 },
+  { text: 'Hit 8 dance notes to cheer up the crowd.', type: 'hit', target: 8, reward: 8 },
+  { text: 'Finish 2 songs to unlock your next spotlight.', type: 'song', target: 2, reward: 10 },
+];
 
 const defaultState = {
   starNotes: 0,
@@ -9,6 +15,8 @@ const defaultState = {
   selectedItem: '🌈',
   chillMode: false,
   gloom: 40,
+  questIndex: 0,
+  questProgress: 0,
 };
 
 const runtime = {
@@ -48,6 +56,8 @@ const el = {
   streak: document.getElementById('streak'),
   gloomMeter: document.getElementById('gloomMeter'),
   gloomBar: document.getElementById('gloomBar'),
+  questText: document.getElementById('questText'),
+  questProgress: document.getElementById('questProgress'),
   buildTab: document.getElementById('buildTab'),
   danceTab: document.getElementById('danceTab'),
   buildMode: document.getElementById('buildMode'),
@@ -67,6 +77,25 @@ let audioCtx;
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
+}
+
+function activeQuest() {
+  return quests[state.questIndex % quests.length];
+}
+
+function progressQuest(type, amount = 1) {
+  const quest = activeQuest();
+  if (quest.type !== type) return;
+  state.questProgress += amount;
+  if (state.questProgress >= quest.target) {
+    state.starNotes += quest.reward;
+    el.songStatus.textContent = `✨ Quest complete! +${quest.reward} Star Notes`;
+    state.questIndex += 1;
+    state.questProgress = 0;
+  }
+  updateHUD();
+  saveState();
+  renderShop();
 }
 
 function changeGloom(delta) {
@@ -89,6 +118,7 @@ function saveState() {
 }
 
 function updateHUD() {
+  const quest = activeQuest();
   el.starNotes.textContent = state.starNotes;
   el.friendHearts.textContent = state.friendHearts;
   el.rainbowKeys.textContent = state.rainbowKeys;
@@ -96,6 +126,8 @@ function updateHUD() {
   el.streak.textContent = state.streak;
   el.gloomMeter.textContent = state.gloom;
   el.gloomBar.style.width = `${state.gloom}%`;
+  el.questText.textContent = quest.text;
+  el.questProgress.textContent = `${state.questProgress} / ${quest.target}`;
   el.chillMode.checked = state.chillMode;
 }
 
@@ -195,6 +227,7 @@ function hitLane(laneIdx) {
   state.friendHearts += 1;
   if (state.friendHearts % 8 === 0) state.rainbowKeys += 1;
   changeGloom(2);
+  progressQuest('hit', 1);
   playBeep(520, 0.05);
   saveState();
   el.songStatus.textContent = `Great move! Hits: ${runtime.hitCount}`;
@@ -217,6 +250,7 @@ function endSong() {
     changeGloom(8);
   }
 
+  progressQuest('song', 1);
   saveState();
   renderShop();
   setupSongs();
@@ -293,6 +327,7 @@ el.ranch.addEventListener('click', (e) => {
   state.friendHearts += 1;
   if (state.friendHearts % 8 === 0) state.rainbowKeys += 1;
   changeGloom(itemByEmoji(state.selectedItem).gloomBoost);
+  progressQuest('build', 1);
   saveState();
 });
 

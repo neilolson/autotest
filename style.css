@@ -28,6 +28,26 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 1rem 2rem; }
   border: 2px solid #fff;
 }
 
+.quest-card {
+  margin-top: .8rem;
+  background: #fff7db;
+  border: 2px solid #ffefb4;
+  border-radius: 12px;
+  padding: .6rem .8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+}
+.quest-progress {
+  margin-left: auto;
+  background: white;
+  border: 1px solid #ffe39f;
+  border-radius: 999px;
+  padding: .2rem .6rem;
+  font-weight: bold;
+}
+
 .controls-row {
   margin: 1rem 0;
   display: flex;
