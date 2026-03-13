@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rainbow Beat Ranch Guardians</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,6 +14,7 @@
   <header>
     <h1>🦄 Rainbow Beat Ranch Guardians 🐰</h1>
     <p>Build your magical ranch, then dance to the beat to clear the gloom!</p>
+    <div class="free-badge">Free boost: Tone.js synth + canvas-confetti</div>
   </header>
 
   <main>
@@ -101,6 +105,8 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

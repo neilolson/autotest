@@ -6,17 +6,24 @@ A kid-friendly browser prototype that combines:
 - **Synth Jam** (child-made rhythm on keyboard)
 - **Quest loop** (simple goals with reward stars)
 
+## Free resources integrated
+
+To improve graphics/audio/game feel, this prototype now uses free tools:
+- **Tone.js** (free, open-source): richer synth sound.
+- **canvas-confetti** (free, open-source): celebration effects.
+- **Google Fonts Nunito** (free): friendlier UI typography.
+
 ## Files you need on your PC
 
-To **run the game**, keep these in the same folder:
+To run the game, keep these in one folder:
 - `index.html`
 - `style.css`
 - `game.js`
 
-Optional but recommended:
-- `README.md` (instructions)
-- `scripts/smoke_test.sh` (quick automated check)
-- `unicorn_game_ideas.md` (design notes only)
+Optional but useful:
+- `README.md`
+- `scripts/smoke_test.sh`
+- `unicorn_game_ideas.md` (design notes)
 
 ## Run locally
 
@@ -24,34 +31,28 @@ Optional but recommended:
 python3 -m http.server 8000
 ```
 
-Open in browser:
+Open:
 
 `http://localhost:8000/index.html`
 
 ## Controls
 
-- Build Mode: click/tap the ranch to place the selected item.
-- Dance Mode keys: `A`, `S`, `D`.
-- Synth Jam keys: `J`, `K`, `L`.
-- Touch: use on-screen rhythm and synth buttons.
-- Chill Mode: easier timing.
-
-## Smooth gameplay notes
-
-- The rhythm track uses `requestAnimationFrame` for smoother movement.
-- Synth notes are generated in-browser with Web Audio (no external files).
-- Unicorn dancer reacts to rhythm/synth hits with visual animations.
+- Build Mode: click/tap the ranch to place selected item.
+- Rhythm keys: `A`, `S`, `D`
+- Synth keys: `J`, `K`, `L`
+- Touch: on-screen rhythm/synth buttons
+- Chill Mode: easier timing
 
 ## Local testing
 
-### 1) Manual playtest
-1. Start server and open the game URL.
-2. Place a few decorations and verify quest progress changes.
-3. Start a song and hit `A/S/D` on beat.
-4. Press `J/K/L` to play synth notes and watch unicorn dance feedback.
-5. Confirm stars/hearts/gloom update and saves persist on refresh.
+### Manual test
+1. Start server and open URL.
+2. Place decorations and verify quest progress.
+3. Start a song and hit rhythm notes (`A/S/D`).
+4. Play synth rhythm (`J/K/L`) and check unicorn dance reactions.
+5. Confirm gloom/stars/hearts change and progress persists after refresh.
 
-### 2) Smoke test
+### Smoke test
 
 ```bash
 ./scripts/smoke_test.sh
@@ -59,4 +60,4 @@ Open in browser:
 
 ## Monetization policy
 
-All unlockables are earned in game through play. There are no payments, no premium pass, and no microtransactions.
+All unlockables are earned in-game through play. No payments, premium pass, or microtransactions.

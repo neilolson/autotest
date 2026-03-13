@@ -1,4 +1,4 @@
-const SAVE_KEY = 'rainbow_beat_ranch_save_v5';
+const SAVE_KEY = 'rainbow_beat_ranch_save_v6';
 
 const quests = [
   { text: 'Place 3 decorations to start your ranch show.', type: 'build', target: 3, reward: 5 },
@@ -27,8 +27,8 @@ const runtime = {
   hitCount: 0,
   beatCount: 0,
   spawnAccumulator: 0,
-  moveAccumulator: 0,
   song: null,
+  lastTs: 0,
   activeKeys: new Set(),
 };
 
@@ -50,7 +50,7 @@ const shopItems = [
 ];
 
 const keyMap = { a: 0, s: 1, d: 2 };
-const synthMap = { j: 261.63, k: 329.63, l: 392.0 };
+const synthMap = { j: 'C4', k: 'E4', l: 'G4' };
 
 const state = loadState();
 const el = {
@@ -83,6 +83,9 @@ const el = {
 
 let audioCtx;
 let lastSynthAt = 0;
+let toneReady = false;
+let toneSynth = null;
+let toneReverb = null;
 
 function loadState() {
   try {
@@ -102,6 +105,22 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
+function burstConfetti() {
+  if (typeof confetti !== 'function') return;
+  confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+}
+
+async function ensureToneReady() {
+  if (!window.Tone || toneReady) return;
+  await window.Tone.start();
+  toneReverb = new Tone.Reverb(1.2).toDestination();
+  toneSynth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: 'triangle' },
+    envelope: { attack: 0.02, decay: 0.1, sustain: 0.2, release: 0.8 },
+  }).connect(toneReverb);
+  toneReady = true;
+}
+
 function changeGloom(delta) {
   state.gloom = clamp(state.gloom + delta, 0, 100);
 }
@@ -119,6 +138,7 @@ function progressQuest(type, amount = 1) {
     state.questIndex += 1;
     state.questProgress = 0;
     el.songStatus.textContent = `✨ Quest complete! +${quest.reward} Star Notes`;
+    burstConfetti();
   }
   renderShop();
   updateHUD();
@@ -181,7 +201,7 @@ function getAudioContext() {
   return audioCtx;
 }
 
-function playSynthNote(freq, duration = 0.18) {
+function playFallbackSynth(freq, duration = 0.18) {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   const osc = ctx.createOscillator();
@@ -203,15 +223,23 @@ function triggerUnicornDance(label) {
   setTimeout(() => el.unicornDancer.classList.remove('dance'), 130);
 }
 
-function handleSynthInput(key) {
-  const freq = synthMap[key];
-  if (!freq) return;
-  playSynthNote(freq);
+async function handleSynthInput(key) {
+  const note = synthMap[key];
+  if (!note) return;
+
+  await ensureToneReady();
+  if (toneReady && toneSynth) {
+    toneSynth.triggerAttackRelease(note, '8n');
+  } else {
+    const freqMap = { C4: 261.63, E4: 329.63, G4: 392.0 };
+    playFallbackSynth(freqMap[note] || 300);
+  }
+
   const now = performance.now();
   const rhythmGap = now - lastSynthAt;
   lastSynthAt = now;
 
-  if (rhythmGap > 180 && rhythmGap < 520) {
+  if (rhythmGap > 170 && rhythmGap < 540) {
     triggerUnicornDance('Nice rhythm! Unicorn groove +1');
     changeGloom(1);
     progressQuest('synth', 1);
@@ -273,6 +301,7 @@ function endSong() {
     el.songStatus.textContent = '🎉 You cleared the gloom and saved the ranch concert! +15⭐';
     state.gloom = 35;
     state.starNotes += 15;
+    burstConfetti();
   } else {
     el.songStatus.textContent = `Song complete! You earned ${stars} Star Notes.`;
   }
@@ -290,7 +319,7 @@ function songLoop(timestamp) {
   const dt = timestamp - runtime.lastTs;
   runtime.lastTs = timestamp;
 
-  const beatMs = 60000 / runtime.song.bpm * (state.chillMode ? 1.15 : 1);
+  const beatMs = (60000 / runtime.song.bpm) * (state.chillMode ? 1.15 : 1);
   const fallSpeed = state.chillMode ? 145 : 185;
 
   runtime.spawnAccumulator += dt;
@@ -301,7 +330,7 @@ function songLoop(timestamp) {
   }
 
   runtime.notes = runtime.notes.filter((note) => {
-    const nextY = parseFloat(note.style.top) + (fallSpeed * dt / 1000);
+    const nextY = parseFloat(note.style.top) + ((fallSpeed * dt) / 1000);
     note.style.top = `${nextY}px`;
     if (nextY > 332) {
       note.remove();
@@ -363,6 +392,7 @@ window.addEventListener('keydown', (e) => {
   if (laneIdx !== undefined) hitLane(laneIdx);
   if (synthMap[key]) handleSynthInput(key);
 });
+
 window.addEventListener('keyup', (e) => runtime.activeKeys.delete(e.key.toLowerCase()));
 
 el.touchButtons.forEach((btn) => btn.addEventListener('click', () => hitLane(Number(btn.dataset.lane))));
