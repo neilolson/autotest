@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rainbow Beat Ranch Guardians</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-stars"></div>
+  <header>
+    <h1>🦄 Rainbow Beat Ranch Guardians 🐰</h1>
+    <p>Build your magical ranch, then dance to the beat to clear the gloom!</p>
+    <div class="free-badge">Free boost: Tone.js synth + canvas-confetti</div>
+  </header>
+
+  <main>
+    <section class="hud">
+      <div>⭐ Star Notes: <span id="starNotes">0</span></div>
+      <div>💖 Friend Hearts: <span id="friendHearts">0</span></div>
+      <div>🗝️ Rainbow Keys: <span id="rainbowKeys">0</span></div>
+      <div>🎵 Songs Unlocked: <span id="songsUnlocked">1</span>/3</div>
+      <div>🏆 Current Streak: <span id="streak">0</span></div>
+      <div>🔥 Combo: <span id="combo">0</span></div>
+      <div>🌟 Best Combo: <span id="bestCombo">0</span></div>
+      <div>🎯 Accuracy: <span id="accuracy">0</span>%</div>
+      <div>⏱️ Timing: <span id="timingReadout">0</span>ms</div>
+      <div>🌫️ Gloom Meter: <span id="gloomMeter">40</span>/100</div>
+    </section>
+
+    <section class="quest-card" aria-live="polite">
+      <strong>🎯 Quest:</strong>
+      <span id="questText">Place 3 decorations to start your ranch show.</span>
+      <span id="questProgress" class="quest-progress">0 / 3</span>
+    </section>
+
+
+    <section class="panel-lite parent-tools">
+      <h3>👨‍👩‍👧 Parent Tools</h3>
+      <div class="parent-actions">
+        <button id="exportSave">Export Save</button>
+        <button id="importSave">Import Save</button>
+      </div>
+      <textarea id="saveData" rows="3" placeholder="Save data appears here for copy/paste"></textarea>
+    </section>
+
+        <section class="achievements panel-lite">
+      <h3>🏅 Achievements</h3>
+      <div id="achievements" class="achievement-grid"></div>
+    </section>
+
+    <section class="controls-row">
+      <button id="buildTab" class="active">🏗️ Build Mode</button>
+      <button id="danceTab">💃 Dance Mode</button>
+      <label class="toggle"><input id="chillMode" type="checkbox" /> Chill Mode</label>
+      <label class="toggle"><input id="autoAssist" type="checkbox" /> Auto-Assist</label>
+      <label class="toggle"><input id="bigMode" type="checkbox" /> Big Buttons</label>
+      <label class="toggle"><input id="muteAudio" type="checkbox" /> Mute</label>
+      <label class="toggle"><input id="practiceLoop" type="checkbox" /> Practice Loop</label>
+      <label class="toggle">Timing Offset
+        <input id="timingOffset" type="range" min="-80" max="80" step="5" value="0" />
+      </label>
+      <label class="toggle">Art
+        <select id="graphicsMode">
+          <option value="storybook">Storybook</option>
+          <option value="sticker">Sticker</option>
+          <option value="voxel">Voxel</option>
+        </select>
+      </label>
+      <button id="resetProgress" class="danger">Reset Save</button>
+    </section>
+
+    <section id="buildMode" class="panel active">
+      <h2>Build Mode</h2>
+      <p>Pick an item, then tap/click on the ranch to place it. Decorations lower the gloom!</p>
+      <div class="shop" id="shop"></div>
+      <div class="ranch-wrap">
+        <div id="ranch" aria-label="Ranch build area"></div>
+      </div>
+    </section>
+
+    <section id="danceMode" class="panel">
+      <h2>Dance Mode</h2>
+      <p>Rhythm keys: <strong>A</strong>, <strong>S</strong>, <strong>D</strong> • Synth keys: <strong>J</strong>, <strong>K</strong>, <strong>L</strong> • Pause: <strong>Space</strong></p>
+
+      <div class="song-picker">
+        <label for="songSelect">Song:</label>
+        <select id="songSelect"></select>
+        <button id="startSong">Start Song</button>
+        <button id="pauseSong" disabled>Pause</button>
+        <button id="powerMove" disabled>🌈 Power Move (1 key)</button>
+      </div>
+
+      <div class="progress-wrap" aria-label="Gloom progress">
+        <div id="gloomBar" class="gloom-bar"></div>
+      </div>
+
+      <div class="stage-wrap">
+        <div id="unicornDancer" class="unicorn-dancer" aria-label="Dancing unicorn">
+          <span class="spark">✨</span>
+          🦄
+        </div>
+        <div id="bunnyDancer" class="bunny-dancer" aria-label="Dancing bunny">🐇</div>
+        <div class="stage-caption" id="synthStatus">Synth Jam: Play J / K / L to make beats!</div>
+        <div class="judge-caption" id="judgeStatus">Hit notes near the line for Perfect timing!</div>
+        <div class="miss-caption" id="missStatus">No misses yet — keep dancing!</div>
+      </div>
+
+      <div class="lane-wrap" id="laneWrap">
+        <div class="lane"><div class="hit-line">A</div></div>
+        <div class="lane"><div class="hit-line">S</div></div>
+        <div class="lane"><div class="hit-line">D</div></div>
+      </div>
+
+      <div class="touch-controls" aria-label="Touch controls for dance mode">
+        <button data-lane="0">A</button>
+        <button data-lane="1">S</button>
+        <button data-lane="2">D</button>
+      </div>
+
+      <div class="synth-pad" aria-label="Synth pads">
+        <button data-synth="j">J ♪</button>
+        <button data-synth="k">K ♫</button>
+        <button data-synth="l">L ♬</button>
+      </div>
+
+      <div id="songStatus">Tap Start Song to begin!</div>
+    </section>
+
+    <section class="rules">
+      <h3>Parent-Friendly Rules</h3>
+      <ul>
+        <li>No microtransactions.</li>
+        <li>No paid currency.</li>
+        <li>All unlockables are earned by play only.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
